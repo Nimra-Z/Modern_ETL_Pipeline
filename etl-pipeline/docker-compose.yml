@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  etl:
+    build: .
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - TARGET_DB_USER=${TARGET_DB_USER}
+      - TARGET_DB_PASSWORD=${TARGET_DB_PASSWORD}
+      - API_TOKEN=${API_TOKEN}
+      - SLACK_WEBHOOK=${SLACK_WEBHOOK}
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:17
+    environment:
+      - POSTGRES_USER=${TARGET_DB_USER}
+      - POSTGRES_PASSWORD=${TARGET_DB_PASSWORD}
+      - POSTGRES_DB=target_db
+    ports:
+      - "5431:5431"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data: 

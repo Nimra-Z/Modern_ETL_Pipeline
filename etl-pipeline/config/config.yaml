@@ -1,0 +1,72 @@
+# ETL Pipeline Configuration
+
+# Data Sources
+sources:
+  csv:
+    path: "data/input/sample_data.csv"
+    delimiter: ","
+    encoding: "utf-8"
+  
+  api:
+    base_url: "https://api.example.com"
+    endpoints:
+      users: "/users"
+      products: "/products"
+    headers:
+      Authorization: "Bearer ${API_TOKEN}"
+  
+  database:
+    host: "localhost"
+    port: 5432
+    database: "source_db"
+    user: "${DB_USER}"
+    password: "${DB_PASSWORD}"
+
+# Target Database
+target:
+  host: "postgres"
+  port: 5432
+  database: "target_db"
+  user: "${TARGET_DB_USER}"
+  password: "${TARGET_DB_PASSWORD}"
+  schema: "public"
+  table: "users"
+
+# Transformation Rules
+transformations:
+  - name: "clean_data"
+    type: "data_cleaning"
+    rules:
+      - remove_duplicates: true
+      - handle_missing_values: "mean"
+      - standardize_dates: true
+  
+  - name: "enrich_data"
+    type: "data_enrichment"
+    rules:
+      - add_timestamp: true
+      - calculate_metrics: true
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/etl_pipeline.log"
+  max_size: 10485760  # 10MB
+  backup_count: 5
+
+# Error Handling
+error_handling:
+  max_retries: 3
+  retry_delay: 5  # seconds
+  error_notification:
+    email: "admin@example.com"
+    slack_webhook: "${SLACK_WEBHOOK}"
+
+# Monitoring
+monitoring:
+  metrics_port: 9090
+  health_check_interval: 60  # seconds
+  alert_thresholds:
+    error_rate: 0.01
+    processing_time: 300  # seconds 
