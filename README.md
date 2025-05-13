@@ -41,16 +41,12 @@ etl-pipeline/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/etl-pipeline.git
+git clone https://github.com/Nimra-Z/Modern_ETL_Pipeline.git
 cd etl-pipeline
 ```
 
 ### 2. Set up environment variables
 
-Copy `.env.example` to `.env` and fill in your own credentials:
-```bash
-cp .env.example .env
-```
 **Never commit your real `.env` file to version control!**
 
 ### 3. Build and run with Docker Compose
